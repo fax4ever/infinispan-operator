@@ -89,6 +89,11 @@ test: manager manifests generate-mocks envtest
 infinispan-test: manager manifests
 	scripts/run-tests.sh infinispan
 
+.PHONY: pallino-test
+## Execute end to end (e2e) tests for Pallino CRs
+pallino-test: manager manifests
+	scripts/run-tests.sh pallino	
+
 .PHONY: cache-test
 ## Execute end to end (e2e) tests for Cache CRs
 cache-test: manager manifests
