@@ -19,6 +19,6 @@ jobs:
 
       - name: Add release labels on merge
         run: ./scripts/ci/pr-label-issues.sh "${{ github.event.pull_request.number }}" "$GITHUB_REPOSITORY" "$GITHUB_BASE_REF" >> "$GITHUB_STEP_SUMMARY"
-        if: github.repository == 'infinispan/infinispan-operator' && github.event.pull_request.merged == true
+        if: github.repository == 'faxever/infinispan-operator' && github.event.pull_request.merged == true
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
