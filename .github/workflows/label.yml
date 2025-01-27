@@ -17,6 +17,7 @@ jobs:
         with:
           sparse-checkout: ./scripts/ci
 
+      # Bla bla bla    
       - name: Add release labels on merge
         run: ./scripts/ci/pr-label-issues.sh "${{ github.event.pull_request.number }}" "$GITHUB_REPOSITORY" "$GITHUB_BASE_REF" >> "$GITHUB_STEP_SUMMARY"
         if: github.repository == 'faxever/infinispan-operator' && github.event.pull_request.merged == true
