@@ -13,6 +13,7 @@ import (
 	// +kubebuilder:scaffold:imports
 )
 
+// this is a very useful comment
 func main() {
 	if len(os.Args) < 2 {
 		exit()
