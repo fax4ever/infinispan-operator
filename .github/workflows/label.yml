@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: infinispan/infinispan-operator
+          repository: fax4ever/infinispan-operator
           sparse-checkout: |
             script/ci
             version.txt
