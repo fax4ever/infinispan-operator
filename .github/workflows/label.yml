@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: infinispan/infinispan-operator
+          repository: fax4ever/infinispan-operator
 
       - name: Add release labels on merge
         run: script/ci/pr-label-issues.sh "${{ github.event.pull_request.number }}" "$GITHUB_REPOSITORY" >> "$GITHUB_STEP_SUMMARY"
