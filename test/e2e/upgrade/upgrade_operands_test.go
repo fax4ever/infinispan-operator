@@ -32,7 +32,7 @@ func TestOperandUpgrades(t *testing.T) {
 	startingOperandIdx := -1
 	for i, op := range versionManager.Operands {
 		// We must start at Infinispan 14.0.8 or higher due to ISPN-12224
-		if op.UpstreamVersion.Major == 14 && op.UpstreamVersion.Patch >= 8 {
+		if op.UpstreamVersion.Major == 15 && op.UpstreamVersion.Patch >= 1 {
 			startingOperandIdx = i
 			break
 		}

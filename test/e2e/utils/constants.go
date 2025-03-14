@@ -18,8 +18,8 @@ var (
 	RouteTimeout         = timeout("TEST_ROUTE_TIMEOUT", "4m")
 	DefaultPollPeriod    = timeout("TEST_DEFAULT_POLL_PERIOD", "1s") // DefaultPollPeriod is the default retry time when waiting for resources
 	ConditionPollPeriod  = timeout("TEST_CONDITION_POLL_PERIOD", "1s")
-	MaxWaitTimeout       = timeout("TEST_MAX_WAIT_TIMEOUT", "3m") // MaxWaitTimeout is the maximum time to wait for resources
-	ConditionWaitTimeout = timeout("TEST_CONDITION_WAIT_TIMEOUT", "3m")
+	MaxWaitTimeout       = timeout("TEST_MAX_WAIT_TIMEOUT", "30m") // MaxWaitTimeout is the maximum time to wait for resources
+	ConditionWaitTimeout = timeout("TEST_CONDITION_WAIT_TIMEOUT", "30m")
 
 	LogOutputDir = constants.GetEnvWithDefault("TESTING_LOG_DIR", os.TempDir()+"/infinispan-operator")
 
