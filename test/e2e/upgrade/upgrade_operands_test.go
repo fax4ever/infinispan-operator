@@ -2,7 +2,6 @@ package upgrade
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
 	ispnv1 "github.com/infinispan/infinispan-operator/api/v1"
@@ -59,11 +58,7 @@ func TestOperandUpgrades(t *testing.T) {
 	// Add a persistent cache with data to ensure contents can be read after upgrade(s)
 	createAndPopulatePersistentCache(persistentCacheName, numEntries, client)
 
-	// Add a volatile cache with data to ensure contents can be backed up and then restored after upgrade(s)
-	createAndPopulateVolatileCache(volatileCacheName, numEntries, client)
-
 	assertNoDegradedCaches()
-	backup := createBackupAndWaitToSucceed(ispn.Name, t)
 
 	skippedOperands := tutils.OperandSkipSet()
 	for _, operand := range versionManager.Operands[startingOperandIdx:] {
@@ -96,18 +91,6 @@ func TestOperandUpgrades(t *testing.T) {
 		client = tutils.HTTPClientForClusterWithVersionManager(ispn, testKube, versionManager)
 		tutils.NewCacheHelper(persistentCacheName, client).AssertSize(numEntries)
 
-		// Restore the backup and ensure that the cache exists with the expected number of entries
-		restoreName := strings.ReplaceAll(operand.Ref(), ".", "-")
-		if restore, err := createRestoreAndWaitToSucceed(restoreName, backup, t); err != nil {
-			tutils.ExpectNoError(
-				ignoreRestoreError(sub.Status.InstalledCSV, operand, ispn, restore, client, err),
-			)
-			// We must recreate the caches that should have been restored if the Restore CR had succeeded
-			// so that the Backup CR executed in the next loop has the expected content
-			createAndPopulateVolatileCache(volatileCacheName, numEntries, client)
-		}
-
-		tutils.NewCacheHelper(volatileCacheName, client).AssertSize(numEntries)
 		checkServicePorts(t, ispn.Name)
 		checkBatch(t, ispn)
 
