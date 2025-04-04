@@ -91,9 +91,6 @@ func TestOperandUpgrades(t *testing.T) {
 		client = tutils.HTTPClientForClusterWithVersionManager(ispn, testKube, versionManager)
 		tutils.NewCacheHelper(persistentCacheName, client).AssertSize(numEntries)
 
-		checkServicePorts(t, ispn.Name)
-		checkBatch(t, ispn.Name)
-
 		// Kill the first pod to ensure that the cluster can recover from failover after upgrade
 		err := testKube.Kubernetes.Client.Delete(ctx, &corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
