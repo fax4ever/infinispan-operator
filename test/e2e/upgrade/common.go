@@ -3,6 +3,7 @@ package upgrade
 import (
 	"context"
 	"fmt"
+	batchCtrl "github.com/infinispan/infinispan-operator/controllers"
 	"os"
 	"regexp"
 	"strings"
@@ -242,12 +243,26 @@ func checkServicePorts(t *testing.T, name string) {
 	assert.Equal(t, constants.InfinispanAdminPort, int(adminPort[0].Port))
 }
 
-func checkBatch(t *testing.T, name string) {
+func checkBatch(t *testing.T, infinispan *ispnv1.Infinispan) {
+	configMapName := infinispan.Name + "-cm"
+	configMap := &corev1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      configMapName,
+			Namespace: infinispan.Namespace,
+		},
+		Data: map[string]string{
+			batchCtrl.BatchFilename: "create cache --file=/etc/batch/mycache.xml mycache",
+			"mycache.xml":           "<distributed-cache />",
+		},
+	}
+
+	testKube.CreateConfigMap(configMap)
+	defer testKube.DeleteConfigMap(configMap)
+
 	// Run a batch in the migrated cluster
 	batchHelper := batchtest.NewBatchHelper(testKube)
-	config := "create cache --template=org.infinispan.DIST_SYNC batch-cache"
-	batch := batchHelper.CreateBatch(t, name, name, &config, nil, nil)
-	batchHelper.WaitForValidBatchPhase(name, v2.BatchSucceeded)
+	batch := batchHelper.CreateBatch(t, infinispan.Name, infinispan.Name, nil, &configMapName, nil)
+	batchHelper.WaitForValidBatchPhase(infinispan.Name, v2.BatchSucceeded)
 	testKube.DeleteBatch(batch)
 }
 
